@@ -1,5 +1,6 @@
 import 'package:erp/screens/stock/stock.dart';
 import 'package:erp/screens/tasks/task_functionlity/list_of_staff/staff_list_screen.dart';
+import 'package:erp/screens/tasks/task_functionlity/list_of_tasks/task_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -211,7 +212,9 @@ class _TasksdashboardState extends State<Tasksdashboard> {
             title: "List of Tasks",
             icon: Icons.task_rounded,
             color: Colors.green,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>TaskListScreen()));
+            },
           ),
           ErpCard(
             title: "List of Staff",

@@ -1,22 +1,22 @@
 import 'package:erp/screens/tasks/task_functionlity/list_of_staff/add_new_staff.dart';
 import 'package:flutter/material.dart';
 
-class StaffListScreen extends StatefulWidget {
-  const StaffListScreen({super.key});
+class TaskListScreen extends StatefulWidget {
+  const TaskListScreen({super.key});
 
   @override
-  State<StaffListScreen> createState() => _StaffListScreenState();
+  State<TaskListScreen> createState() => _StaffListScreenState();
 }
 
-class _StaffListScreenState extends State<StaffListScreen> {
+class _StaffListScreenState extends State<TaskListScreen> {
   TextEditingController searchController = TextEditingController();
 
   // Dummy staff data
-  List<Map<String, String>> staffList = [
-    {"name": "Ali Khan", "phone": "0301-1234567"},
-    {"name": "Ahmed Raza", "phone": "0302-9876543"},
-    {"name": "Sara Malik", "phone": "0303-4567890"},
-    {"name": "Usman Shah", "phone": "0304-1122334"},
+  List<Map<String, String>> taskList = [
+    {"task": "Ali Khan", "phone": "0301-1234567"},
+    {"task": "Ahmed Raza", "phone": "0302-9876543"},
+    {"task": "Sara Malik", "phone": "0303-4567890"},
+    {"task": "Usman Shah", "phone": "0304-1122334"},
   ];
 
   List<Map<String, String>> filteredList = [];
@@ -24,17 +24,17 @@ class _StaffListScreenState extends State<StaffListScreen> {
   @override
   void initState() {
     super.initState();
-    filteredList = staffList;
+    filteredList = taskList;
   }
 
   void filterStaff(String query) {
     setState(() {
-      filteredList = staffList
+      filteredList = taskList
           .where(
             (staff) =>
-                staff["name"]!.toLowerCase().contains(query.toLowerCase()) ||
-                staff["phone"]!.contains(query),
-          )
+        staff["task"]!.toLowerCase().contains(query.toLowerCase()) ||
+            staff["phone"]!.contains(query),
+      )
           .toList();
     });
   }
@@ -68,7 +68,7 @@ class _StaffListScreenState extends State<StaffListScreen> {
             onPressed: () => Navigator.pop(context),
           ),
           title: const Text(
-            "Staff Management",
+            "Task List",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class _StaffListScreenState extends State<StaffListScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  "Staff",
+                  "Task",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton.icon(
@@ -121,7 +121,7 @@ class _StaffListScreenState extends State<StaffListScreen> {
               controller: searchController,
               onChanged: filterStaff,
               decoration: InputDecoration(
-                hintText: "Search staff...",
+                hintText: "Search task...",
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.white,
@@ -162,7 +162,7 @@ class _StaffListScreenState extends State<StaffListScreen> {
 
                       // ===== NAME =====
                       title: Text(
-                        staff["name"]!,
+                        staff["task"]!,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
