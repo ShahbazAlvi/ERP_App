@@ -1,22 +1,23 @@
 import 'package:erp/screens/tasks/task_functionlity/list_of_staff/add_new_staff.dart';
+import 'package:erp/screens/tasks/task_functionlity/list_of_tasks/add_new_task.dart';
 import 'package:flutter/material.dart';
 
 class TaskListScreen extends StatefulWidget {
   const TaskListScreen({super.key});
 
   @override
-  State<TaskListScreen> createState() => _StaffListScreenState();
+  State<TaskListScreen> createState() => _TaskListScreenState();
 }
 
-class _StaffListScreenState extends State<TaskListScreen> {
+class _TaskListScreenState extends State<TaskListScreen> {
   TextEditingController searchController = TextEditingController();
 
   // Dummy staff data
   List<Map<String, String>> taskList = [
-    {"task": "Ali Khan", "phone": "0301-1234567"},
-    {"task": "Ahmed Raza", "phone": "0302-9876543"},
-    {"task": "Sara Malik", "phone": "0303-4567890"},
-    {"task": "Usman Shah", "phone": "0304-1122334"},
+    {"task": "website", "disk": "abcdefgjh"},
+    {"task": "mobile app", "disk": "hhfhhfh"},
+    {"task": "ecommerce website", "disk": "fghrv"},
+    {"task": "mobile app", "disk": "shshhs"},
   ];
 
   List<Map<String, String>> filteredList = [];
@@ -33,7 +34,7 @@ class _StaffListScreenState extends State<TaskListScreen> {
           .where(
             (staff) =>
         staff["task"]!.toLowerCase().contains(query.toLowerCase()) ||
-            staff["phone"]!.contains(query),
+            staff["disc"]!.contains(query),
       )
           .toList();
     });
@@ -97,7 +98,7 @@ class _StaffListScreenState extends State<TaskListScreen> {
                     // Navigate to Add Staff Screen
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddNewStaff()),
+                      MaterialPageRoute(builder: (context) =>AddNewTask()),
                     );
                   },
                   icon: const Icon(Icons.add),
@@ -139,7 +140,7 @@ class _StaffListScreenState extends State<TaskListScreen> {
               child: ListView.builder(
                 itemCount: filteredList.length,
                 itemBuilder: (context, index) {
-                  final staff = filteredList[index];
+                  final task = filteredList[index]; // each task is different
 
                   return Container(
                     margin: const EdgeInsets.only(bottom: 12),
@@ -160,18 +161,18 @@ class _StaffListScreenState extends State<TaskListScreen> {
                         vertical: 8,
                       ),
 
-                      // ===== NAME =====
+                      // ===== TASK NAME =====
                       title: Text(
-                        staff["task"]!,
+                        task["task"] ?? "No Task",
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      // ===== PHONE =====
+                      // ===== TASK DISK =====
                       subtitle: Text(
-                        staff["phone"]!,
+                        task["disk"] ?? "No disk",
                         style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                       ),
 
@@ -181,7 +182,7 @@ class _StaffListScreenState extends State<TaskListScreen> {
                         children: [
                           Container(
                             width: 28,
-                            height: 20,
+                            height: 28,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.blue.shade100,
@@ -195,20 +196,18 @@ class _StaffListScreenState extends State<TaskListScreen> {
                                 size: 18,
                               ),
                               onPressed: () {
-                                // Edit staff
+                                // Edit task
                               },
                             ),
                           ),
-                          SizedBox(width: 4),
-                          const SizedBox(width: 0),
+                          const SizedBox(width: 6),
                           Container(
                             width: 28,
-                            height: 20,
+                            height: 28,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.red.shade100,
                             ),
-
                             child: IconButton(
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
@@ -218,22 +217,22 @@ class _StaffListScreenState extends State<TaskListScreen> {
                                 size: 18,
                               ),
                               onPressed: () {
-                                // Delete staff
+                                // Delete task
                               },
                             ),
                           ),
                         ],
                       ),
 
-                      // OPTIONAL: Tap whole tile
                       onTap: () {
-                        // View staff details
+                        // View task details
                       },
                     ),
                   );
                 },
               ),
-            ),
+            )
+
           ],
         ),
       ),
