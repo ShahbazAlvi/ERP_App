@@ -1,7 +1,10 @@
 import 'package:erp/screens/tasks/task_functionlity/list_of_staff/add_new_staff.dart';
 import 'package:erp/screens/tasks/task_functionlity/list_of_tasks/add_new_task.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../Model/Task_model/Assign_task_staff_model.dart';
+import '../../../../provider/Task/TaskAssignStaff_provider.dart';
 import 'new_task_assign.dart';
 
 class TaskAssigneScreen extends StatefulWidget {
@@ -15,35 +18,47 @@ class _TaskListScreenState extends State<TaskAssigneScreen> {
   TextEditingController searchController = TextEditingController();
 
   // Dummy staff data
-  List<Map<String, String>> taskList = [
-    {"Assign_Id":"Assign001","task": "website", "disk": "shahbaz"},
-    {"Assign_Id":"Assign002","task": "mobile app", "disk": "Tahir"},
-    {"Assign_Id":"Assign003","task": "ecommerce website", "disk": "Ali"},
-    {"Assign_Id":"Assign004","task": "mobile app", "disk": "Zain"},
-  ];
+  // List<Map<String, String>> taskList = [
+  //   {"Assign_Id":"Assign001","task": "website", "disk": "shahbaz"},
+  //   {"Assign_Id":"Assign002","task": "mobile app", "disk": "Tahir"},
+  //   {"Assign_Id":"Assign003","task": "ecommerce website", "disk": "Ali"},
+  //   {"Assign_Id":"Assign004","task": "mobile app", "disk": "Zain"},
+  // ];
 
-  List<Map<String, String>> filteredList = [];
+  List<AssignTaskStaffModel> filteredList = [];
 
+
+  @override
+  // void initState() {
+  //   super.initState();
+  //   filteredList = taskList;
+  // }
   @override
   void initState() {
     super.initState();
-    filteredList = taskList;
+    Future.microtask(() {
+      context.read<TaskassignstaffProvider>().getAssignStaff();
+    });
   }
 
-  void filterStaff(String query) {
+
+  void filterStaff(
+      String query,
+      List<AssignTaskStaffModel> tasks,
+      ) {
     setState(() {
-      filteredList = taskList
-          .where(
-            (staff) =>
-        staff["task"]!.toLowerCase().contains(query.toLowerCase()) ||
-            staff["disc"]!.contains(query),
-      )
+      filteredList = tasks
+          .where((task) =>
+      task.task.toLowerCase().contains(query.toLowerCase()) ||
+          task.dist.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final task=Provider.of<TaskassignstaffProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
 
@@ -122,130 +137,199 @@ class _TaskListScreenState extends State<TaskAssigneScreen> {
             // ===== SEARCH BAR =====
             TextField(
               controller: searchController,
-              onChanged: filterStaff,
+              onChanged: (value) {
+                filterStaff(
+                  value,
+                  context.read<TaskassignstaffProvider>().assignTask,
+                );
+              },
               decoration: InputDecoration(
                 hintText: "Search task...",
                 prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
-                ),
               ),
             ),
+
 
             const SizedBox(height: 16),
 
             // ===== STAFF LIST =====
+            // Expanded(
+            //   child: ListView.builder(
+            //     itemCount: filteredList.length,
+            //     itemBuilder: (context, index) {
+            //       final task = filteredList[index]; // each task is different
+            //
+            //       return Container(
+            //         margin: const EdgeInsets.only(bottom: 12),
+            //         decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.circular(16),
+            //           boxShadow: [
+            //             BoxShadow(
+            //               color: Colors.grey.withOpacity(0.15),
+            //               blurRadius: 6,
+            //               offset: const Offset(0, 3),
+            //             ),
+            //           ],
+            //         ),
+            //         child: ListTile(
+            //           contentPadding: const EdgeInsets.symmetric(
+            //             horizontal: 16,
+            //             vertical: 8,
+            //           ),
+            //
+            //           // ===== TASK NAME =====
+            //           title: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Text(
+            //                 task["Assign_Id"] ?? "No Task",
+            //                 style: const TextStyle(
+            //                   fontSize: 16,
+            //                   fontWeight: FontWeight.bold,
+            //                 ),
+            //               ),
+            //               Text(
+            //                 task["task"] ?? "No Task",
+            //                 style: const TextStyle(
+            //                   fontSize: 16,
+            //                   fontWeight: FontWeight.bold,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //
+            //           // ===== TASK DISK =====
+            //           subtitle: Text(
+            //             task["disk"] ?? "No disk",
+            //             style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+            //           ),
+            //
+            //           // ===== ACTION BUTTONS =====
+            //           trailing: Row(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: [
+            //               Container(
+            //                 width: 28,
+            //                 height: 28,
+            //                 decoration: BoxDecoration(
+            //                   borderRadius: BorderRadius.circular(5),
+            //                   color: Colors.blue.shade100,
+            //                 ),
+            //                 child: IconButton(
+            //                   padding: EdgeInsets.zero,
+            //                   constraints: const BoxConstraints(),
+            //                   icon: const Icon(
+            //                     Icons.edit,
+            //                     color: Colors.blue,
+            //                     size: 18,
+            //                   ),
+            //                   onPressed: () {
+            //                     // Edit task
+            //                   },
+            //                 ),
+            //               ),
+            //               const SizedBox(width: 6),
+            //               Container(
+            //                 width: 28,
+            //                 height: 28,
+            //                 decoration: BoxDecoration(
+            //                   borderRadius: BorderRadius.circular(5),
+            //                   color: Colors.red.shade100,
+            //                 ),
+            //                 child: IconButton(
+            //                   padding: EdgeInsets.zero,
+            //                   constraints: const BoxConstraints(),
+            //                   icon: const Icon(
+            //                     Icons.delete,
+            //                     color: Colors.red,
+            //                     size: 18,
+            //                   ),
+            //                   onPressed: () {
+            //                     // Delete task
+            //                   },
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //
+            //           onTap: () {
+            //             // View task details
+            //           },
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // )
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) {
-                  final task = filteredList[index]; // each task is different
+              child: Consumer<TaskassignstaffProvider>(
+                builder: (context, provider, child) {
+                  if (provider.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          blurRadius: 6,
-                          offset: const Offset(0, 3),
+                  final tasks = searchController.text.isEmpty
+                      ? provider.assignTask
+                      : filteredList;
+
+                  if (tasks.isEmpty) {
+                    return const Center(child: Text("No Task Found"));
+                  }
+
+                  return ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      final task = tasks[index];
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.15),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-
-                      // ===== TASK NAME =====
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            task["Assign_Id"] ?? "No Task",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: ListTile(
+                          title: Text(
+                            task.assignid,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text(
-                            task["task"] ?? "No Task",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      // ===== TASK DISK =====
-                      subtitle: Text(
-                        task["disk"] ?? "No disk",
-                        style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                      ),
-
-                      // ===== ACTION BUTTONS =====
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 28,
-                            height: 28,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.blue.shade100,
-                            ),
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.blue,
-                                size: 18,
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(task.task),
+                              Text(
+                                task.dist,
+                                style: TextStyle(color: Colors.grey[600]),
                               ),
-                              onPressed: () {
-                                // Edit task
-                              },
-                            ),
+                            ],
                           ),
-                          const SizedBox(width: 6),
-                          Container(
-                            width: 28,
-                            height: 28,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.red.shade100,
-                            ),
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 18,
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, size: 18,color: Colors.blue,),
+                                onPressed: () {},
                               ),
-                              onPressed: () {
-                                // Delete task
-                              },
-                            ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, size: 18,color: Colors.blue,),
+                                onPressed: () {},
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-
-                      onTap: () {
-                        // View task details
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
-            )
+            ),
+
 
           ],
         ),
