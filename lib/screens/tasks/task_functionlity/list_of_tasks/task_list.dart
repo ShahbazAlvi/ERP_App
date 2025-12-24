@@ -1,6 +1,9 @@
+import 'package:erp/provider/Task/TaskListProvider.dart';
 import 'package:erp/screens/tasks/task_functionlity/list_of_staff/add_new_staff.dart';
 import 'package:erp/screens/tasks/task_functionlity/list_of_tasks/add_new_task.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 class TaskListScreen extends StatefulWidget {
   const TaskListScreen({super.key});
@@ -23,9 +26,15 @@ class _TaskListScreenState extends State<TaskListScreen> {
   List<Map<String, String>> filteredList = [];
 
   @override
+  // void initState() {
+  //   super.initState();
+  //   filteredList = taskList;
+  // }
   void initState() {
     super.initState();
-    filteredList = taskList;
+    Future.microtask(() {
+      context.read<TaskListProvider>().getAssignStaff();
+    });
   }
 
   void filterStaff(String query) {
@@ -137,100 +146,207 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
             // ===== STAFF LIST =====
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) {
-                  final task = filteredList[index]; // each task is different
+              child: Consumer<TaskListProvider>(
+                  builder:(context, provider, child) {
+                    if (provider.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (provider.taskList.isEmpty) {
+                      return const Center(child: Text("No Task Found"));
 
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          blurRadius: 6,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
+                    }
+                    return ListView.builder(
+                      itemCount: provider.taskList.length,
+                        itemBuilder: (context,index) {
+                          final tasklist = provider.taskList[index];
 
-                      // ===== TASK NAME =====
-                      title: Text(
-                        task["task"] ?? "No Task",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      // ===== TASK DISK =====
-                      subtitle: Text(
-                        task["disk"] ?? "No disk",
-                        style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                      ),
-
-                      // ===== ACTION BUTTONS =====
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 28,
-                            height: 28,
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 12),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.blue.shade100,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.15),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
                             ),
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.blue,
-                                size: 18,
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
                               ),
-                              onPressed: () {
-                                // Edit task
+
+                              // ===== TASK NAME =====
+                              title: Text(
+                                tasklist.task ?? "No Task",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              // ===== TASK DISK =====
+                              subtitle: Text(
+                                tasklist.taskDetail ?? "No disk",
+                                style: TextStyle(
+                                    fontSize: 13, color: Colors.grey[600]),
+                              ),
+
+                              // ===== ACTION BUTTONS =====
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 28,
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.blue.shade100,
+                                    ),
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                        size: 18,
+                                      ),
+                                      onPressed: () {
+                                        // Edit task
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Container(
+                                    width: 28,
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.red.shade100,
+                                    ),
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 18,
+                                      ),
+                                      onPressed: () {
+                                        // Delete task
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              onTap: () {
+                                // View task details
                               },
                             ),
-                          ),
-                          const SizedBox(width: 6),
-                          Container(
-                            width: 28,
-                            height: 28,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.red.shade100,
-                            ),
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 18,
-                              ),
-                              onPressed: () {
-                                // Delete task
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                          );
+                        }
+                    );
 
-                      onTap: () {
-                        // View task details
-                      },
+                  }
                     ),
-                  );
-                },
-              ),
+              // child: ListView.builder(
+              //   itemCount: filteredList.length,
+              //   itemBuilder: (context, index) {
+              //     final task = filteredList[index]; // each task is different
+
+                  // return Container(
+                  //   margin: const EdgeInsets.only(bottom: 12),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(16),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: Colors.grey.withOpacity(0.15),
+                  //         blurRadius: 6,
+                  //         offset: const Offset(0, 3),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: ListTile(
+                  //     contentPadding: const EdgeInsets.symmetric(
+                  //       horizontal: 16,
+                  //       vertical: 8,
+                  //     ),
+                  //
+                  //     // ===== TASK NAME =====
+                  //     title: Text(
+                  //       task["task"] ?? "No Task",
+                  //       style: const TextStyle(
+                  //         fontSize: 16,
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //
+                  //     // ===== TASK DISK =====
+                  //     subtitle: Text(
+                  //       task["disk"] ?? "No disk",
+                  //       style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                  //     ),
+                  //
+                  //     // ===== ACTION BUTTONS =====
+                  //     trailing: Row(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Container(
+                  //           width: 28,
+                  //           height: 28,
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(5),
+                  //             color: Colors.blue.shade100,
+                  //           ),
+                  //           child: IconButton(
+                  //             padding: EdgeInsets.zero,
+                  //             constraints: const BoxConstraints(),
+                  //             icon: const Icon(
+                  //               Icons.edit,
+                  //               color: Colors.blue,
+                  //               size: 18,
+                  //             ),
+                  //             onPressed: () {
+                  //               // Edit task
+                  //             },
+                  //           ),
+                  //         ),
+                  //         const SizedBox(width: 6),
+                  //         Container(
+                  //           width: 28,
+                  //           height: 28,
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(5),
+                  //             color: Colors.red.shade100,
+                  //           ),
+                  //           child: IconButton(
+                  //             padding: EdgeInsets.zero,
+                  //             constraints: const BoxConstraints(),
+                  //             icon: const Icon(
+                  //               Icons.delete,
+                  //               color: Colors.red,
+                  //               size: 18,
+                  //             ),
+                  //             onPressed: () {
+                  //               // Delete task
+                  //             },
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //
+                  //     onTap: () {
+                  //       // View task details
+                  //     },
+                  //   ),
+                  // );
+               // },
+             // ),
             )
 
           ],

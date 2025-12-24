@@ -40,6 +40,7 @@ class _AddNewTaskState extends State<AddNewTaskStaff> {
 
   String? selectedDepartment;
   String? selectedEmployee;
+  String priority = "High";
 
   String? selectedTaskType;
 
@@ -87,24 +88,37 @@ class _AddNewTaskState extends State<AddNewTaskStaff> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              const FloatingInputField(
+               FloatingInputField(
+                controller: taskNameController,
                 label: "Task",
                 hintText: "Enter Task name ",
                 icon: Icons.task_outlined,
                 title: 'Task Name',
               ),
               CustomDropdownField(
-                title: "Task Assigned",
-                hint: "Select a Customer",
+                title: "Staff",
+                hint: "Select Staff",
                 icon: Icons.work_outline,
-                items: taskTypes,            // 👈 LIST DATA
-                value: selectedTaskType,     // 👈 SELECTED VALUE
+                items: staff,            // 👈 LIST DATA
+                value: selectedEmployee,     // 👈 SELECTED VALUE
                 onChanged: (value) {
                   setState(() {
-                    selectedTaskType = value;
+                    selectedEmployee = value;
                   });
                 },
               ),
+              // CustomDropdownField(
+              //   title: "Select Customer",
+              //   hint: "Select a Customer",
+              //   icon: Icons.work_outline,
+              //   items: taskTypes,            // 👈 LIST DATA
+              //   value: selectedTaskType,     // 👈 SELECTED VALUE
+              //   onChanged: (value) {
+              //     setState(() {
+              //       selectedTaskType = value;
+              //     });
+              //   },
+              // ),
 
               const SizedBox(height: 12),
               FloatingDateField(
@@ -118,7 +132,8 @@ class _AddNewTaskState extends State<AddNewTaskStaff> {
                 label: "End Date",
                 icon: Icons.date_range,
                 controller: endDateController, title: 'End Date',
-              ), CustomDropdownField(
+              ),
+              CustomDropdownField(
                 title: "Department",
                 hint: "Select Department",
                 icon: Icons.work_outline,
@@ -129,18 +144,51 @@ class _AddNewTaskState extends State<AddNewTaskStaff> {
                     selectedDepartment = value;
                   });
                 },
-              ), CustomDropdownField(
-                title: "Staff",
-                hint: "Select Staff",
-                icon: Icons.work_outline,
-                items: staff,            // 👈 LIST DATA
-                value: selectedEmployee,     // 👈 SELECTED VALUE
-                onChanged: (value) {
-                  setState(() {
-                    selectedEmployee = value;
-                  });
-                },
               ),
+              const SizedBox(height: 20),
+
+              // ✅ Priority Radio Buttons
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Priority",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text("High"),
+                      value: "High",
+                      groupValue: priority,
+                      onChanged: (value) {
+                        setState(() {
+                          priority = value!;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text("Low"),
+                      value: "Low",
+                      groupValue: priority,
+                      onChanged: (value) {
+                        setState(() {
+                          priority = value!;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 25),
@@ -148,19 +196,51 @@ class _AddNewTaskState extends State<AddNewTaskStaff> {
                   text: "Add New Task",
                   icon: Icons.add,
                   color: Color(0xFF42A5F5),
+                  // onPressed: () {
+                  //   final provider =
+                  //   Provider.of<TaskassignstaffProvider>(context, listen: false);
+                  //
+                  //   final newTask = AssignTaskStaffModel(
+                  //     assignid: "Assign00${provider.assignTask.length + 1}",
+                  //     task: taskNameController.text,
+                  //     staff: selectedEmployee ?? "",
+                  //   );
+                  //
+                  //   provider.addTask(newTask); // 🔥 yahi UI update karega
+                  //   Navigator.pop(context);
+                  // },
                   onPressed: () {
+                    // Basic validation (optional but recommended)
+                    if (taskNameController.text.isEmpty ||
+                        selectedTaskType == null ||
+                        startDateController.text.isEmpty ||
+                        endDateController.text.isEmpty ||
+                        selectedDepartment == null ||
+                        selectedEmployee == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please fill all fields")),
+                      );
+                      return;
+                    }
+
                     final provider =
                     Provider.of<TaskassignstaffProvider>(context, listen: false);
 
                     final newTask = AssignTaskStaffModel(
                       assignid: "Assign00${provider.assignTask.length + 1}",
                       task: taskNameController.text,
-                      staff: selectedEmployee ?? "",
+                      staff: selectedEmployee!,
+                      startDate: startDateController.text,
+                      endDate: endDateController.text,
+                      customer: selectedTaskType!,
+                      department: selectedDepartment!,
+
                     );
 
-                    provider.addTask(newTask); // 🔥 yahi UI update karega
+                    provider.addTask(newTask); // 🔥 UI auto update
                     Navigator.pop(context);
                   },
+
 
                 ),
               ),

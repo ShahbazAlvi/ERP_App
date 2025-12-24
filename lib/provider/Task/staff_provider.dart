@@ -25,5 +25,9 @@ class StaffProvider with ChangeNotifier{
     notifyListeners();
 
   }
+  void addStaff(StaffListModel staff){
+    _staffList.add(staff);
+    notifyListeners();
+  }
 
 }
