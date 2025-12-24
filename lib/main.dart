@@ -2,6 +2,7 @@ import 'package:erp/home.dart';
 import 'package:erp/provider/Task/TaskAssignStaff_provider.dart';
 import 'package:erp/provider/Task/TaskListProvider.dart';
 import 'package:erp/provider/Task/staff_provider.dart';
+import 'package:erp/splash_screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         ),
 
       ),
-      home:Home(),
+      home:Splashscreen(),
     );
   }
 }
