@@ -1,5 +1,6 @@
 import 'package:erp/home.dart';
 import 'package:erp/provider/Task/TaskAssignStaff_provider.dart';
+import 'package:erp/provider/Task/TaskListProvider.dart';
 import 'package:erp/provider/Task/staff_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_)=>TaskassignstaffProvider()),
     ChangeNotifierProvider(create: (_)=>StaffProvider()),
+    ChangeNotifierProvider(create: (_)=>TaskListProvider()),
 
   ],
       child: const MyApp(),
