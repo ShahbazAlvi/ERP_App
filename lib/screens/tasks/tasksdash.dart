@@ -80,6 +80,7 @@ class _TasksdashboardState extends State<Tasksdashboard> {
                     icon: Icons.check_circle, // completion icon
                     index: 1,
                     onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>TaskProgress()));
 
                     },
                   ),
@@ -90,6 +91,7 @@ class _TasksdashboardState extends State<Tasksdashboard> {
                     icon: Icons.autorenew, // in-progress icon
                     index: 2,
                     onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>TaskProgress()));
                       // Navigate to In Progress Tasks Screen
                     },
                   ),
@@ -238,7 +240,9 @@ class _TasksdashboardState extends State<Tasksdashboard> {
             title: "Task Completed",
             icon: Icons.assignment_ind, // assigned to staff
             color: Colors.green,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>TaskProgress()));
+            },
           ),
           ErpCard(
             title: "Delayed Tasks",

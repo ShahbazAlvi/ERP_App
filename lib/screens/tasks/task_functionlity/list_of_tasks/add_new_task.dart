@@ -1,6 +1,9 @@
+import 'package:erp/provider/Task/TaskListProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../Model/Task_model/Task_list_model.dart';
 import '../../../../widgets/app_buttons.dart';
 import '../../../../widgets/app_textfields.dart';
 import '../../../../widgets/start_end_date_picker.dart';
@@ -15,6 +18,9 @@ class AddNewTask extends StatefulWidget {
 class _AddNewTaskState extends State<AddNewTask> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
+  TextEditingController taskNameController = TextEditingController();
+  TextEditingController taskDetailController = TextEditingController();
+  TextEditingController resourcesController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,15 +62,16 @@ class _AddNewTaskState extends State<AddNewTask> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              const FloatingInputField(
+               FloatingInputField(
                 hintText: "Enter Task name ",
                 icon: Icons.task_outlined,
                 title: 'Task Name',
+                controller: taskNameController,
               ),
-             const FloatingInputField(
+              FloatingInputField(
                 label: "Task Details",
                 hintText: "Enter Task Details",
-
+                controller: taskDetailController,
                 title: 'Task Details',
                 maxLines: 3,
               ), const SizedBox(height: 12),
@@ -78,11 +85,12 @@ class _AddNewTaskState extends State<AddNewTask> {
                 label: "End Date",
                 icon: Icons.date_range,
                 controller: endDateController, title: 'End Date',
-              ),const FloatingInputField(
+              ),FloatingInputField(
                 label: "Resources",
                 hintText: "Enter Task name ",
                 icon: Icons.task_outlined,
                 title: 'No.of Resources(required)',
+                controller: resourcesController,
               ),
 
               Padding(
@@ -91,9 +99,20 @@ class _AddNewTaskState extends State<AddNewTask> {
                   text: "Add New Task",
                   icon: Icons.add,
                   color: Color(0xFF42A5F5),
-                  onPressed: () {
-                    print("Add Staff button clicked");
-                  },
+
+                    onPressed: () {
+                      final provider=Provider.of<TaskListProvider>(context,listen: false);
+                      final newTaskList = TaskModel(
+                          taskId: "task00${provider.taskList.length + 1}",
+                          task: taskNameController.text,
+                          taskDetail: taskDetailController.text,
+                          startDate: startDateController.text,
+                          endDate: endDateController.text,
+                          resources: resourcesController.text);
+                      provider.addTaskList(newTaskList); // 🔥 UI auto update
+                      Navigator.pop(context);
+                    },
+
                 ),
               ),
             ],

@@ -172,14 +172,16 @@ class _TaskListScreenState extends State<TaskAssigneScreen> {
                           ],
                         ),
                         child: ListTile(
+                          onTap: () {
+                            showTaskDetailDialog(context, task);
+                          },
                           title: Text(
-                            task.assignid,
+                            task.task,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(task.task),
                               Text(
                                 task.staff,
                                 style: TextStyle(color: Colors.grey[600]),
@@ -213,4 +215,74 @@ class _TaskListScreenState extends State<TaskAssigneScreen> {
       ),
     );
   }
+  void showTaskDetailDialog(
+      BuildContext context,
+      AssignTaskStaffModel task,
+      ) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            "Task Details",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _detailRow("Assign ID", task.assignid),
+                _detailRow("Task", task.task),
+                _detailRow("Staff", task.staff),
+                _detailRow("Department", task.department),
+                _detailRow("Customer", task.customer),
+                _detailRow("Start Date", task.startDate),
+                _detailRow("End Date", task.endDate),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close"),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+
+  Widget _detailRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Text(
+              "$title :",
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Text(
+              value.isEmpty ? "-" : value,
+              style: const TextStyle(color: Colors.black87),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }

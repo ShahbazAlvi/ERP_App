@@ -1,0 +1,42 @@
+[
+  {
+    "task_id": "task001",
+    "task": "Sandwich order",
+    "task_detail": "Sandwich order by Lahore",
+    "start_date": "2025-01-10",
+    "end_date": "2025-01-20",
+    "resources": "online"
+  },
+  {
+    "task_id": "task002",
+    "task": "Website Development",
+    "task_detail": "Company website frontend and backend development",
+    "start_date": "2025-01-12",
+    "end_date": "2025-02-05",
+    "resources": "office"
+  },
+  {
+    "task_id": "task003",
+    "task": "ERP Module Setup",
+    "task_detail": "ERP inventory and finance module configuration",
+    "start_date": "2025-01-15",
+    "end_date": "2025-02-15",
+    "resources": "office"
+  },
+  {
+    "task_id": "task004",
+    "task": "Delivery Management",
+    "task_detail": "Manage daily delivery orders in Lahore city",
+    "start_date": "2025-01-18",
+    "end_date": "2025-01-25",
+    "resources": "field"
+  },
+  {
+    "task_id": "task005",
+    "task": "Customer Support",
+    "task_detail": "Handle online customer support and complaints",
+    "start_date": "2025-01-20",
+    "end_date": "2025-02-10",
+    "resources": "online"
+  }
+]

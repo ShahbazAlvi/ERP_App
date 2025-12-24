@@ -2,21 +2,41 @@
   {
     "assignid":"Assign001",
     "task": "Website",
-    "staff": "Shahbaz"
+    "staff": "Shahbaz",
+    "start_date": "2025-01-10",
+    "end_date": "2025-01-20",
+    "customer": "Tech Solutions Inc.",
+    "department": "IT"
+
   },
   {
     "assignid":"Assign002",
     "task": "ERP task complete",
-    "staff": "Gulfam"
+    "staff": "Gulfam",
+    "start_date": "2025-01-10",
+    "end_date": "2025-01-20",
+    "customer": "Tech Solutions Inc.",
+    "department": "IT"
+
   },
   {
     "assignid":"Assign003",
     "task": "Sandwich order",
-    "staff": "Zain"
+    "staff": "Zain",
+    "start_date": "2025-01-10",
+    "end_date": "2025-01-20",
+    "customer": "Tech Solutions Inc.",
+    "department": "IT"
+
   },
   {
     "assignid":"Assign004",
     "task": "fance account order",
-    "staff": "Eman"
+    "staff": "Eman",
+    "start_date": "2025-01-10",
+    "end_date": "2025-01-20",
+    "customer": "Tech Solutions Inc.",
+    "department": "IT"
+
   }
 ]
