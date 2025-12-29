@@ -75,7 +75,8 @@ class _AddComplaintsState extends State<AddComplaints> {
           label: "Complaint Date ",
           icon: Icons.date_range,
           controller: endDateController, title: 'Complaint date',
-        ),FloatingInputField(
+        ),
+            FloatingInputField(
 
               hintText: "Enter Task name ",
               icon: Icons.confirmation_number,

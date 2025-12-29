@@ -90,16 +90,20 @@ class CustomElevatedButton extends StatelessWidget {
     this.borderRadius = 12,
     this.icon,
     this.width,
-    this.height = 50,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
     return SizedBox(
-      width: width ?? double.infinity,
-      height: height,
+      width: width * 0.9, // 90% screen width
+      height: height * 0.07,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(horizontal: width * 0.03),
           backgroundColor: color,
           foregroundColor: textColor,
           shape: RoundedRectangleBorder(

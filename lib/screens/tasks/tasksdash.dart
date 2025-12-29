@@ -1,8 +1,8 @@
-
 import 'package:erp/screens/tasks/reports/task_progress.dart';
 import 'package:erp/screens/tasks/task_functionlity/Staff_assign_task/assign_staff_task.dart';
 import 'package:erp/screens/tasks/task_functionlity/list_of_staff/staff_list_screen.dart';
 import 'package:erp/screens/tasks/task_functionlity/list_of_tasks/task_list.dart';
+import 'package:erp/screens/tasks/task_functionlity/task_tracker/task_track.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/erpcards.dart';
@@ -211,6 +211,14 @@ class _TasksdashboardState extends State<Tasksdashboard> {
             color: Colors.green,
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>TaskAssigneScreen()));
+            },
+          ),
+          ErpCard(
+            title: "Task Tracker",
+            icon: Icons.assignment_ind, // assigned to staff
+            color: Colors.orange,
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>TaskTrackerScreen()));
             },
           ),
         ],

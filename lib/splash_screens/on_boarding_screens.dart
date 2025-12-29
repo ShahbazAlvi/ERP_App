@@ -14,7 +14,7 @@ class _OnBoardingScreensState extends State<OnBoardingScreens> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
     Introscreens(
-      title: "Manage Everything \nin One Place",
+      title: "Manage Everything \n  in One Place",
       description:
           "Track operations, manage resources, and monitor performance seamlessly with a centralized ERP system designed to simplify your business workflow.",
       imagePath: "assets/images/img1.png",
@@ -107,7 +107,7 @@ class _OnBoardingScreensState extends State<OnBoardingScreens> {
                 elevation: 6,
               ),
               child: Text(
-                _currentIndex == _pages.length - 1 ? "Finish" : "Next",
+                _currentIndex == _pages.length - 1 ? "Start" : "Next",
                 style: TextStyle(color: Colors.white),
               ),
             ),
