@@ -38,6 +38,9 @@ class _AddComplaintAttendedState extends State<AddComplaintAttended> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: PreferredSize(
@@ -255,7 +258,8 @@ class _AddComplaintAttendedState extends State<AddComplaintAttended> {
                     color: Colors.green, // left button green
                   ),
                 ),
-                const SizedBox(width: 12), // spacing
+                // spacing
+                SizedBox(width: 10,),
                 Expanded(
                   child: CustomElevatedButton(
                     onPressed: () {

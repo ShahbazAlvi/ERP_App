@@ -11,28 +11,27 @@ class StaffComplaintsList extends StatefulWidget {
 class _StaffComplaintsListState extends State<StaffComplaintsList> {
   TextEditingController searchController = TextEditingController();
 
-  // Dummy complaint data
   List<Map<String, dynamic>> complaintList = [
     {
       "id": "Complaint001",
       "customer": "Ali Khan",
       "products": ["Website", "Mobile App", "ERP Module"],
       "date": "2025-12-22",
-      "assign":"Assign001"
+      "assign": "Assign001"
     },
     {
       "id": "Complaint002",
       "customer": "Ali",
       "products": ["Mobile App"],
       "date": "2025-12-21",
-      "assign":"Assign002"
+      "assign": "Assign002"
     },
     {
       "id": "Complaint003",
       "customer": "Usman",
       "products": ["Mobile App", "Odoo ERP"],
       "date": "2025-12-20",
-      "assign":"Assign003"
+      "assign": "Assign003"
     },
   ];
 
@@ -47,19 +46,22 @@ class _StaffComplaintsListState extends State<StaffComplaintsList> {
   void filterComplaints(String query) {
     setState(() {
       filteredList = complaintList
-          .where((complaint) =>
-      complaint["id"].toString().toLowerCase().contains(query.toLowerCase()) ||
-          complaint["customer"].toString().toLowerCase().contains(query.toLowerCase()))
+          .where((c) =>
+      c["id"].toLowerCase().contains(query.toLowerCase()) ||
+          c["customer"].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: Size.fromHeight(height * 0.12),
         child: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -77,13 +79,14 @@ class _StaffComplaintsListState extends State<StaffComplaintsList> {
             ),
           ),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: Icon(Icons.arrow_back,
+                color: Colors.white, size: width * 0.065),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
+          title: Text(
             "Assign Complaints to Staff List",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: width * 0.045,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -91,40 +94,57 @@ class _StaffComplaintsListState extends State<StaffComplaintsList> {
           centerTitle: true,
         ),
       ),
+
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(width * 0.04),
+
         child: Column(
           children: [
-            // Header + Add Button
+            // Header + Button
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Assign Complaints to Staff",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  "Assign Complaints",
+                  style: TextStyle(
+                    fontSize: width * 0.05,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+
                 ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AddComplaintsTostaff()),
+                      MaterialPageRoute(
+                        builder: (context) =>
+                        const AddComplaintsTostaff(),
+                      ),
                     );
                   },
-                  icon: const Icon(Icons.add),
-                  label: const Text("Add New"),
+                  icon: Icon(Icons.add, size: width * 0.05),
+                  label: Text(
+                    "Add New",
+                    style: TextStyle(fontSize: width * 0.04),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
                     backgroundColor: const Color(0xFF1976D2),
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.05,
+                      vertical: height * 0.015,
+                    ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                ),
+                )
               ],
             ),
-            const SizedBox(height: 12),
 
-            // Search bar
+            SizedBox(height: height * 0.015),
+
+            // Search Field
             TextField(
               controller: searchController,
               onChanged: filterComplaints,
@@ -139,154 +159,150 @@ class _StaffComplaintsListState extends State<StaffComplaintsList> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
 
-            // Complaints List
+            SizedBox(height: height * 0.02),
+
+            // LIST
             Expanded(
               child: ListView.builder(
                 itemCount: filteredList.length,
                 itemBuilder: (context, index) {
                   final complaint = filteredList[index];
-                  final products = (complaint["products"] as List<dynamic>?)
-                      ?.map((e) => e.toString())
-                      .toList() ??
-                      [];
+                  final products =
+                  (complaint["products"] as List<dynamic>).toList();
 
                   return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
+                    margin: EdgeInsets.only(bottom: height * 0.015),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.15),
-                          blurRadius: 6,
+                          blurRadius: 8,
                           offset: const Offset(0, 3),
                         ),
                       ],
                     ),
+
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(width * 0.04),
+
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Date
+                          // Date + Assign
                           Row(
-                            spacing: 250,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                complaint["date"] ?? "",
+                                complaint["date"],
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: width * 0.032,
                                   color: Colors.grey[600],
                                 ),
                               ),
                               Text(
-                                complaint["assign"] ?? "",
+                                complaint["assign"],
                                 style: TextStyle(
-                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.grey[900],
+                                  fontSize: width * 0.035,
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
 
-                          // ID + Customer Name + Edit/Delete buttons
+                          SizedBox(height: height * 0.01),
+
+                          // ID + Name + Actions
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
                                 child: Text(
                                   "${complaint["id"]} - ${complaint["customer"]}",
-                                  style: const TextStyle(
-                                    fontSize: 16,
+                                  style: TextStyle(
+                                    fontSize: width * 0.042,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
+
                               Row(
                                 children: [
-                                  // Edit Button
-                                  Container(
-                                    width: 28,
-                                    height: 28,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.blue.shade100,
-                                    ),
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(),
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: Colors.blue,
-                                        size: 18,
-                                      ),
-                                      onPressed: () {
-                                        // Edit complaint logic
-                                      },
-                                    ),
+                                  _iconButton(
+                                    color: Colors.blue.shade100,
+                                    icon: Icons.edit,
+                                    iconColor: Colors.blue,
+                                    onTap: () {},
                                   ),
-                                  const SizedBox(width: 6),
-                                  // Delete Button
-                                  Container(
-                                    width: 28,
-                                    height: 28,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.red.shade100,
-                                    ),
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(),
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                        size: 18,
-                                      ),
-                                      onPressed: () {
-                                        // Delete complaint logic
-                                      },
-                                    ),
+                                  SizedBox(width: width * 0.02),
+                                  _iconButton(
+                                    color: Colors.red.shade100,
+                                    icon: Icons.delete,
+                                    iconColor: Colors.red,
+                                    onTap: () {},
                                   ),
                                 ],
-                              ),
+                              )
                             ],
                           ),
-                          const SizedBox(height: 8),
 
-                          // Products
+                          SizedBox(height: height * 0.01),
+
+                          // Products tags
                           Wrap(
-                            spacing: 8,
-                            runSpacing: 4,
+                            spacing: width * 0.02,
                             children: products
                                 .map(
-                                  (product) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
+                                  (p) => Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: width * 0.03,
+                                  vertical: height * 0.008,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
                                 child: Text(
-                                  product,
-                                  style: const TextStyle(fontSize: 13),
+                                  p.toString(),
+                                  style: TextStyle(fontSize: width * 0.032),
                                 ),
                               ),
                             )
                                 .toList(),
-                          ),
+                          )
                         ],
                       ),
                     ),
                   );
                 },
               ),
-            ),
+            )
           ],
         ),
+      ),
+    );
+  }
+
+  // Small reusable icon button
+  Widget _iconButton({
+    required Color color,
+    required IconData icon,
+    required Color iconColor,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        icon: Icon(icon, color: iconColor, size: 18),
+        onPressed: onTap,
       ),
     );
   }
