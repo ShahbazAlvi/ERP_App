@@ -22,6 +22,7 @@ final List<Color> _SummaryColors = [
   Colors.blue.shade900,
   Colors.orange.shade300,
   Colors.purple.shade300,
+
   Colors.red.shade300,
   Colors.teal.shade300,
   Colors.indigo.shade300,
